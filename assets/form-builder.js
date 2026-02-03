@@ -270,6 +270,16 @@
         renderEditor();
         renderExport();
     };
+                const createPreviewField = (field) => {
+        if (field.type === 'textarea') {
+            const textarea = document.createElement('textarea');
+            textarea.className = 'wd-forms-builder__field-textarea';
+            textarea.placeholder = field.placeholder || '';
+            textarea.rows = 3;
+            textarea.disabled = true;
+            return textarea;
+        }
+        if (field.type === 'select') {
             const select = document.createElement('select');
             select.className = 'wd-forms-builder__field-select';
             field.options.forEach((option) => {
@@ -445,6 +455,55 @@
         input.disabled = true;
         return input;
     };
+
+        const renderPreview = () => {
+        preview.innerHTML = '';
+        if (!fields.length) {
+            preview.innerHTML = '<p class="wd-forms-builder__help">Add a field from the library to start building your form.</p>';
+            return;
+        }
+
+        fields.forEach((field) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'wd-forms-builder__preview-field';
+            if (field.id === activeFieldId) {
+                wrapper.classList.add('wd-forms-builder__preview-field--active');
+            }
+
+            const label = document.createElement('span');
+            label.className = 'wd-forms-builder__field-label';
+            label.textContent = field.label;
+            wrapper.appendChild(label);
+
+            wrapper.appendChild(createPreviewField(field));
+
+            const actions = document.createElement('div');
+            actions.className = 'wd-forms-builder__preview-actions';
+
+            const editButton = document.createElement('button');
+            editButton.type = 'button';
+            editButton.textContent = 'Edit';
+            editButton.addEventListener('click', () => setActiveField(field.id));
+
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => removeField(field.id));
+
+            actions.appendChild(editButton);
+            actions.appendChild(removeButton);
+            wrapper.appendChild(actions);
+
+            wrapper.addEventListener('click', (event) => {
+                if (event.target.tagName.toLowerCase() !== 'button') {
+                    setActiveField(field.id);
+                }
+            });
+
+            preview.appendChild(wrapper);
+        });
+    };
+
 
     const renderEditor = () => {
         editor.innerHTML = '';
@@ -701,6 +760,16 @@
         activeFieldId = newField.id;
         renderPreview();
         renderEditor();
+        renderExport();
+    });
+
+    formTitleInput.addEventListener('input', () => {
+        renderExport();
+    });
+
+    copyHtmlButton.addEventListener('click', () => handleCopy(htmlOutput.value, copyHtmlButton));
+    copyJsonButton.addEventListener('click', () => handleCopy(jsonOutput.value, copyJsonButton));
+
     notificationToggle.addEventListener('change', (event) => {
         notificationSettings = { ...notificationSettings, enabled: event.target.checked };
         renderExport();
@@ -830,7 +899,6 @@
         entrySettings = { ...entrySettings, analyticsTag: event.target.value };
         renderExport();
     });
-
     renderPreview();
     renderEditor();
     renderExport();
