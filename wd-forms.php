@@ -30,6 +30,29 @@ function wd_forms_register_assets()
 
 add_action('init', 'wd_forms_register_assets');
 
+function wd_forms_render_builder_page()
+{
+    echo '<div class="wrap">';
+    echo do_shortcode('[wd_forms_builder]');
+    echo '</div>';
+}
+
+function wd_forms_register_admin_menu()
+{
+    add_menu_page(
+        'WD Forms Builder',
+        'WD Forms',
+        'manage_options',
+        'wd-forms-builder',
+        'wd_forms_render_builder_page',
+        'dashicons-feedback',
+        26
+    );
+}
+
+add_action('admin_menu', 'wd_forms_register_admin_menu');
+
+
 function wd_forms_builder_shortcode()
 {
     wp_enqueue_style('wd-forms-builder');
