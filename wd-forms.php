@@ -218,4 +218,4 @@ function wd_forms_builder_shortcode($atts)
     <?php
     return ob_get_clean();
 }
-add_shortcode('wd_forms_builder', 'wd_forms_builder_shortcode')
+add_shortcode('wd_forms_builder', 'wd_forms_builder_shortcode');
