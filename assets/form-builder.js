@@ -95,46 +95,12 @@
     };
 
     const fieldTemplates = {
-        text: {
-            label: 'Full Name',
-            placeholder: 'Jane Doe',
+         address: {
+            label: 'Address',
             required: false
         },
-        phone: {
-            label: 'Phone Number',
-            placeholder: '(555) 555-5555',
-            required: false
-        },
-        email: {
-            label: 'Email Address',
-            placeholder: 'you@example.com',
-            required: true
-        },
-        url: {
-            label: 'Website',
-            placeholder: 'https://example.com',
-            required: false
-        },
-        number: {
-            label: 'Quantity',
-            placeholder: '1',
-            required: false,
-            min: '',
-            max: ''
-        },
-        textarea: {
-            label: 'Message',
-            placeholder: 'Write your message',
-            required: false
-        },
-        select: {
-            label: 'Select Option',
-            options: ['Option 1', 'Option 2', 'Option 3'],
-            required: false
-        },
-        radio: {
-            label: 'Radio Group',
-            options: ['Choice A', 'Choice B'],
+        captcha: {
+            label: 'reCAPTCHA',
             required: false
         },
         checkbox: {
@@ -145,24 +111,61 @@
             label: 'Appointment Date',
             required: false
         },
-        time: {
-            label: 'Preferred Time',
-            required: false
+        divider: {
+            label: 'Divider'
+        },
+        email: {
+            label: 'Email Address',
+            placeholder: 'you@example.com',
+            required: true
         },
         file: {
             label: 'Upload File',
             required: false
         },
-        signature: {
-            label: 'Signature',
-            required: false
+        hidden: {
+            label: 'Hidden Field',
+            defaultValue: ''
         },
-        address: {
-            label: 'Address',
-            required: false
+        html: {
+            label: 'HTML Block',
+            html: '<p>Add custom HTML content</p>'
         },
         name: {
             label: 'Name',
+            required: false
+        },
+        number: {
+            label: 'Quantity',
+            placeholder: '1',
+            required: false,
+            min: '',
+            max: ''
+        },
+        page: {
+            label: 'Page Break'
+        },
+        payment: {
+            label: 'Payment',
+            required: false
+        },
+        phone: {
+            label: 'Phone Number',
+            placeholder: '(555) 555-5555',
+            required: false
+        },
+        product: {
+            label: 'Product',
+            price: 49
+        },
+        quantity: {
+            label: 'Quantity',
+            min: 1,
+            max: 10
+        },
+        radio: {
+            label: 'Radio Group',
+            options: ['Choice A', 'Choice B'],
             required: false
         },
         rating: {
@@ -176,55 +179,52 @@
             min: 1,
             max: 10
         },
+        section: {
+            label: 'Section Heading'
+        },
+        select: {
+            label: 'Select Option',
+            options: ['Option 1', 'Option 2', 'Option 3'],
+            required: false
+        },
+        signature: {
+            label: 'Signature',
+            required: false
+        },
         slider: {
             label: 'Slider',
             required: false,
             min: 0,
             max: 100
         },
+        submit: {
+            label: 'Send Message'
+        },
+        text: {
+            label: 'Full Name',
+            placeholder: 'Jane Doe',
+            required: false
+        },
+        textarea: {
+            label: 'Message',
+            placeholder: 'Write your message',
+            required: false
+        },
+        time: {
+            label: 'Preferred Time',
+            required: false
+        },
         toggle: {
             label: 'Enable Updates',
             required: false
         },
-        captcha: {
-            label: 'reCAPTCHA',
-            required: false
-        },
-        section: {
-            label: 'Section Heading'
-        },
-        divider: {
-            label: 'Divider'
-        },
-        html: {
-            label: 'HTML Block',
-            html: '<p>Add custom HTML content</p>'
-        },
-        page: {
-            label: 'Page Break'
-        },
-        hidden: {
-            label: 'Hidden Field',
-            defaultValue: ''
-        },
-        product: {
-            label: 'Product',
-            price: 49
-        },
-        quantity: {
-            label: 'Quantity',
-            min: 1,
-            max: 10
-        },
         total: {
             label: 'Order Total'
         },
-        payment: {
-            label: 'Payment',
+        url: {  
+            label: 'Website',
+            placeholder: 'https://example.com',
             required: false
-        },
-        submit: {
-            label: 'Send Message'
         }
     };
 

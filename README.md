@@ -30,6 +30,18 @@ WD Forms can work with HTML-only sites by using the exported HTML and JSON as th
 
 In short: WordPress hosts the builder UI, and the exported HTML/JSON can be dropped into any static site as long as you supply the submission handling.
 
+## Entry storage
+
+WD Forms currently focuses on building and exporting form markup + configuration. Form entries are **not** stored by the plugin yet. The "Save entries in WordPress" and entry management settings are included in the export data as configuration flags only, so you can wire them up to your own storage layer.
+
+If you want entries saved today, you need to provide the storage location yourself:
+
+- **WordPress**: Create a custom endpoint (or hook into an existing form handler) that writes submissions to your preferred storage (e.g., a custom database table or a CPT) and respects the export flags.
+- **Non-WordPress**: Send submissions to your own backend, serverless function, or form service and store them in your chosen database.
+
+When entry storage is implemented in the plugin, this section will be updated with the storage location and how to access saved submissions.
+
+
 ## Email scheduling
 
 Use the Email Scheduling panel in the builder to configure notification recipients, subject, message, and delivery delay. These settings are included in the JSON export and as data attributes in the HTML export so you can wire them up to your preferred email delivery service on any website.
