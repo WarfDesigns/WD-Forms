@@ -117,7 +117,7 @@ function wd_forms_builder_shortcode($atts)
         $style_attribute = ' style="' . esc_attr(implode(' ', $inline_styles)) . '"';
     }
     ?>
-    <div class="wd-forms-builder" data-wd-forms-builder<?php echo esc_attr($custom_class); ?>" data-wd-forms-builder<?php echo $style_attribute; ?>>
+       <div class="wd-forms-builder<?php echo esc_attr($custom_class); ?>" data-wd-forms-builder<?php echo $style_attribute; ?>>
         <header class="wd-forms-builder__header">
             <div>
                 <p class="wd-forms-builder__eyebrow">WD Forms Builder</p>
