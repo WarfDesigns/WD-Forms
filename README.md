@@ -45,3 +45,38 @@ When entry storage is implemented in the plugin, this section will be updated wi
 ## Email scheduling
 
 Use the Email Scheduling panel in the builder to configure notification recipients, subject, message, and delivery delay. These settings are included in the JSON export and as data attributes in the HTML export so you can wire them up to your preferred email delivery service on any website.
+
+
+## Conditional logic
+
+WD Forms supports conditional logic rules so you can show/hide fields or sections based on a respondent's answers. Each rule has:
+
+- **Target**: the field or group to show or hide.
+- **Condition**: a comparison against another field's value (for example, equals, contains, or is empty).
+- **Action**: show or hide the target when the condition is met.
+
+The builder exports conditional logic in both the HTML and JSON formats. The HTML export uses `data-wd-conditional-*` attributes, while the JSON export includes a `conditionalLogic` array describing each rule. In WordPress, the plugin interprets these rules automatically. On non-WordPress sites, you can read the exported rules and implement the same behavior in your own front-end script.
+
+### Example: show a follow-up field
+
+Show a "Company name" field only when "Are you registering as a business?" is set to **Yes**.
+
+```
+If [Are you registering as a business?] equals "Yes" → show [Company name]
+```
+
+### Example: hide a section until a choice is made
+
+Hide a "Shipping address" section until "Delivery method" equals **Ship to me**.
+
+```
+If [Delivery method] equals "Ship to me" → show [Shipping address]
+```
+
+### Example: require details when "Other" is selected
+
+Hide an "Other details" field unless "How did you hear about us?" contains **Other**.
+
+```
+If [How did you hear about us?] contains "Other" → show [Other details]
+```
