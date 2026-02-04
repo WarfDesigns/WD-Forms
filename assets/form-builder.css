@@ -63,6 +63,7 @@
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
 
 .wd-forms-builder__layout {
     display: grid;
@@ -133,132 +134,11 @@
     outline: 2px solid rgba(37, 99, 235, 0.6);
     outline-offset: 2px;
 }
-.wd-forms-builder__buttons button::before {
+.wd-forms-builder__button-icon {
     font-size: 16px;
     line-height: 1;
     opacity: 0.9;
 }
-
-.wd-forms-builder__buttons button[data-field-type="text"]::before {
-    content: "📝";
-}
-
-.wd-forms-builder__buttons button[data-field-type="email"]::before {
-    content: "✉️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="phone"]::before {
-    content: "📞";
-}
-
-.wd-forms-builder__buttons button[data-field-type="url"]::before {
-    content: "🔗";
-}
-
-.wd-forms-builder__buttons button[data-field-type="number"]::before {
-    content: "🔢";
-}
-
-.wd-forms-builder__buttons button[data-field-type="textarea"]::before {
-    content: "🗒️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="select"]::before {
-    content: "🧭";
-}
-
-.wd-forms-builder__buttons button[data-field-type="radio"]::before {
-    content: "📻";
-}
-
-.wd-forms-builder__buttons button[data-field-type="checkbox"]::before {
-    content: "☑️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="date"]::before {
-    content: "📅";
-}
-
-.wd-forms-builder__buttons button[data-field-type="time"]::before {
-    content: "⏱️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="file"]::before {
-    content: "📎";
-}
-
-.wd-forms-builder__buttons button[data-field-type="signature"]::before {
-    content: "✍️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="address"]::before {
-    content: "🏠";
-}
-
-.wd-forms-builder__buttons button[data-field-type="name"]::before {
-    content: "🧑";
-}
-
-.wd-forms-builder__buttons button[data-field-type="rating"]::before {
-    content: "⭐";
-}
-
-.wd-forms-builder__buttons button[data-field-type="scale"]::before {
-    content: "📊";
-}
-
-.wd-forms-builder__buttons button[data-field-type="slider"]::before {
-    content: "🎚️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="toggle"]::before {
-    content: "🔛";
-}
-
-.wd-forms-builder__buttons button[data-field-type="captcha"]::before {
-    content: "🛡️";
-}
-
-.wd-forms-builder__buttons button[data-field-type="section"]::before {
-    content: "📌";
-}
-
-.wd-forms-builder__buttons button[data-field-type="divider"]::before {
-    content: "➗";
-}
-
-.wd-forms-builder__buttons button[data-field-type="html"]::before {
-    content: "🧩";
-}
-
-.wd-forms-builder__buttons button[data-field-type="page"]::before {
-    content: "📄";
-}
-
-.wd-forms-builder__buttons button[data-field-type="hidden"]::before {
-    content: "🙈";
-}
-
-.wd-forms-builder__buttons button[data-field-type="product"]::before {
-    content: "📦";
-}
-
-.wd-forms-builder__buttons button[data-field-type="quantity"]::before {
-    content: "🧮";
-}
-
-.wd-forms-builder__buttons button[data-field-type="total"]::before {
-    content: "💵";
-}
-
-.wd-forms-builder__buttons button[data-field-type="payment"]::before {
-    content: "💳";
-}
-
-.wd-forms-builder__buttons button[data-field-type="submit"]::before {
-    content: "🚀";
-}
-
 
 .wd-forms-builder__preview {
     display: flex;
@@ -428,5 +308,4 @@
     padding: 8px 10px;
     border-radius: 8px;
     text-align: center;
-}
 }

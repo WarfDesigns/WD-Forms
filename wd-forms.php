@@ -135,40 +135,40 @@ function wd_forms_builder_shortcode($atts)
                 <p class="wd-forms-builder__help">Click to add fields to your form.</p>
                 <div class="wd-forms-builder__buttons" data-field-library>
                     <p class="wd-forms-builder__library-heading">Core Fields</p>
-                    <button type="button" data-field-type="address">Address</button>
-                    <button type="button" data-field-type="checkbox">Checkbox</button>
-                    <button type="button" data-field-type="date">Date</button>
-                    <button type="button" data-field-type="email">Email</button>
-                    <button type="button" data-field-type="time">Time</button>
-                    <button type="button" data-field-type="file">File Upload</button>
-                    <button type="button" data-field-type="name">Name</button>
-                    <button type="button" data-field-type="number">Number</button>
-                    <button type="button" data-field-type="phone">Phone</button>
-                    <button type="button" data-field-type="radio">Radio Group</button>
-                    <button type="button" data-field-type="select">Select</button>
-                    <button type="button" data-field-type="signature">Signature</button>
-                    <button type="button" data-field-type="text">Text</button>
-                    <button type="button" data-field-type="textarea">Textarea</button>
-                    <button type="button" data-field-type="url">Website</button>
+                     <button type="button" data-field-type="address"><span class="wd-forms-builder__button-icon" aria-hidden="true">🏠</span>Address</button>
+                    <button type="button" data-field-type="checkbox"><span class="wd-forms-builder__button-icon" aria-hidden="true">☑️</span>Checkbox</button>
+                    <button type="button" data-field-type="date"><span class="wd-forms-builder__button-icon" aria-hidden="true">📅</span>Date</button>
+                    <button type="button" data-field-type="email"><span class="wd-forms-builder__button-icon" aria-hidden="true">✉️</span>Email</button>
+                    <button type="button" data-field-type="time"><span class="wd-forms-builder__button-icon" aria-hidden="true">⏱️</span>Time</button>
+                    <button type="button" data-field-type="file"><span class="wd-forms-builder__button-icon" aria-hidden="true">📎</span>File Upload</button>
+                    <button type="button" data-field-type="name"><span class="wd-forms-builder__button-icon" aria-hidden="true">🧑</span>Name</button>
+                    <button type="button" data-field-type="number"><span class="wd-forms-builder__button-icon" aria-hidden="true">🔢</span>Number</button>
+                    <button type="button" data-field-type="phone"><span class="wd-forms-builder__button-icon" aria-hidden="true">📞</span>Phone</button>
+                    <button type="button" data-field-type="radio"><span class="wd-forms-builder__button-icon" aria-hidden="true">📻</span>Radio Group</button>
+                    <button type="button" data-field-type="select"><span class="wd-forms-builder__button-icon" aria-hidden="true">🧭</span>Select</button>
+                    <button type="button" data-field-type="signature"><span class="wd-forms-builder__button-icon" aria-hidden="true">✍️</span>Signature</button>
+                    <button type="button" data-field-type="text"><span class="wd-forms-builder__button-icon" aria-hidden="true">📝</span>Text</button>
+                    <button type="button" data-field-type="textarea"><span class="wd-forms-builder__button-icon" aria-hidden="true">🗒️</span>Textarea</button>
+                    <button type="button" data-field-type="url"><span class="wd-forms-builder__button-icon" aria-hidden="true">🔗</span>Website</button>
                     <p class="wd-forms-builder__library-heading">Engagement</p>
-                    <button type="button" data-field-type="scale">Likert Scale</button>
-                    <button type="button" data-field-type="captcha">reCAPTCHA</button>
-                    <button type="button" data-field-type="slider">Slider</button>
-                    <button type="button" data-field-type="rating">Star Rating</button>
-                    <button type="button" data-field-type="toggle">Toggle</button>
+                    <button type="button" data-field-type="scale"><span class="wd-forms-builder__button-icon" aria-hidden="true">📊</span>Likert Scale</button>
+                    <button type="button" data-field-type="captcha"><span class="wd-forms-builder__button-icon" aria-hidden="true">🛡️</span>reCAPTCHA</button>
+                    <button type="button" data-field-type="slider"><span class="wd-forms-builder__button-icon" aria-hidden="true">🎚️</span>Slider</button>
+                    <button type="button" data-field-type="rating"><span class="wd-forms-builder__button-icon" aria-hidden="true">⭐</span>Star Rating</button>
+                    <button type="button" data-field-type="toggle"><span class="wd-forms-builder__button-icon" aria-hidden="true">🔛</span>Toggle</button>
                     <p class="wd-forms-builder__library-heading">Layout</p>
-                    <button type="button" data-field-type="divider">Divider</button>
-                    <button type="button" data-field-type="hidden">Hidden Field</button>
-                    <button type="button" data-field-type="html">HTML Block</button>
-                    <button type="button" data-field-type="page">Page Break</button>
-                    <button type="button" data-field-type="section">Section Heading</button>
+                    <button type="button" data-field-type="divider"><span class="wd-forms-builder__button-icon" aria-hidden="true">➗</span>Divider</button>
+                    <button type="button" data-field-type="hidden"><span class="wd-forms-builder__button-icon" aria-hidden="true">🙈</span>Hidden Field</button>
+                    <button type="button" data-field-type="html"><span class="wd-forms-builder__button-icon" aria-hidden="true">🧩</span>HTML Block</button>
+                    <button type="button" data-field-type="page"><span class="wd-forms-builder__button-icon" aria-hidden="true">📄</span>Page Break</button>
+                    <button type="button" data-field-type="section"><span class="wd-forms-builder__button-icon" aria-hidden="true">📌</span>Section Heading</button>
                     <p class="wd-forms-builder__library-heading">Commerce</p>
-                    <button type="button" data-field-type="total">Order Total</button>
-                    <button type="button" data-field-type="payment">Payment</button>
-                    <button type="button" data-field-type="product">Product</button>
-                    <button type="button" data-field-type="quantity">Quantity</button>
+                    <button type="button" data-field-type="total"><span class="wd-forms-builder__button-icon" aria-hidden="true">💵</span>Order Total</button>
+                    <button type="button" data-field-type="payment"><span class="wd-forms-builder__button-icon" aria-hidden="true">💳</span>Payment</button>
+                    <button type="button" data-field-type="product"><span class="wd-forms-builder__button-icon" aria-hidden="true">📦</span>Product</button>
+                    <button type="button" data-field-type="quantity"><span class="wd-forms-builder__button-icon" aria-hidden="true">🧮</span>Quantity</button>
                     <p class="wd-forms-builder__library-heading">Actions</p>
-                    <button type="button" data-field-type="submit">Submit Button</button>
+                    <button type="button" data-field-type="submit"><span class="wd-forms-builder__button-icon" aria-hidden="true">🚀</span>Submit Button</button>
                 </div>
             </aside>
 
