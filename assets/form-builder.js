@@ -456,7 +456,32 @@
         return input;
     };
 
-        const renderPreview = () => {
+            const getConditionalOptions = (field) => {
+        const optionsByType = {
+            text: ['equals', 'contains', 'is empty', 'is not empty'],
+            email: ['equals', 'contains', 'is empty', 'is not empty'],
+            textarea: ['equals', 'contains', 'is empty', 'is not empty'],
+            phone: ['equals', 'contains', 'is empty', 'is not empty'],
+            url: ['equals', 'contains', 'is empty', 'is not empty'],
+            hidden: ['equals', 'is empty', 'is not empty'],
+            select: ['is', 'is not', 'is empty'],
+            radio: ['is', 'is not', 'is empty'],
+            checkbox: ['is checked', 'is not checked'],
+            toggle: ['is checked', 'is not checked'],
+            number: ['equals', 'greater than', 'less than', 'is empty'],
+            rating: ['equals', 'greater than', 'less than'],
+            scale: ['equals', 'greater than', 'less than'],
+            slider: ['equals', 'greater than', 'less than'],
+            quantity: ['equals', 'greater than', 'less than'],
+            date: ['is', 'before', 'after', 'is empty'],
+            time: ['is', 'before', 'after', 'is empty'],
+            file: ['has file', 'is empty']
+        };
+
+        return optionsByType[field.type] || [];
+    };
+
+    const renderPreview = () => {
         preview.innerHTML = '';
         if (!fields.length) {
             preview.innerHTML = '<p class="wd-forms-builder__help">Add a field from the library to start building your form.</p>';
@@ -476,6 +501,17 @@
             wrapper.appendChild(label);
 
             wrapper.appendChild(createPreviewField(field));
+
+                  const conditionalOptions = getConditionalOptions(field);
+            const conditionalHelp = document.createElement('p');
+            conditionalHelp.className = 'wd-forms-builder__conditional-help';
+            if (conditionalOptions.length) {
+                conditionalHelp.textContent = `Conditional options: ${conditionalOptions.join(', ')}.`;
+            } else {
+                conditionalHelp.textContent = 'Conditional options: Target-only (show/hide).';
+            }
+            wrapper.appendChild(conditionalHelp);
+
 
             const actions = document.createElement('div');
             actions.className = 'wd-forms-builder__preview-actions';
