@@ -1,10 +1,11 @@
 .wd-forms-builder {
     font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    color: #1f2933;
-    background: #f7f8fb;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    color: #0f172a;
+    background: radial-gradient(circle at top, #f8fafc, #eef2ff 55%, #e9eef7 100%);
+    border-radius: 18px;
+    padding: 28px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
 }
 
 .wd-forms-builder__header {
@@ -13,7 +14,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .wd-forms-builder__eyebrow {
@@ -26,7 +29,8 @@
 
 .wd-forms-builder__title {
     margin: 0;
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: 700;
 }
 
 .wd-forms-builder__meta {
@@ -39,6 +43,7 @@
 .wd-forms-builder__label {
     font-size: 13px;
     font-weight: 600;
+    color: #1f2937;
 }
 
 .wd-forms-builder__input,
@@ -49,19 +54,28 @@
     font-size: 14px;
     width: 100%;
     box-sizing: border-box;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.wd-forms-builder__input:focus,
+.wd-forms-builder textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 
 .wd-forms-builder__layout {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    gap: 22px;
 }
 
 .wd-forms-builder__panel {
     background: #fff;
-    border-radius: 14px;
-    padding: 16px;
+    border-radius: 16px;
+    padding: 18px;
     border: 1px solid #e2e8f0;
+    box-shadow: 0 14px 24px rgba(15, 23, 42, 0.05);
 }
 
 .wd-forms-builder__panel h3 {
@@ -73,6 +87,7 @@
     margin: 0 0 12px;
     font-size: 13px;
     color: #64748b;
+    line-height: 1.4;
 }
 
 .wd-forms-builder__buttons {
@@ -91,7 +106,7 @@
 
 .wd-forms-builder__buttons button,
 .wd-forms-builder__button {
-    background: #0f172a;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
     color: #fff;
     border: none;
     padding: 10px 12px;
@@ -102,13 +117,22 @@
     align-items: center;
     gap: 8px;
     text-align: left;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.16);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .wd-forms-builder__buttons button:hover,
 .wd-forms-builder__button:hover {
-    background: #1d4ed8;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.2);
 }
 
+.wd-forms-builder__buttons button:focus-visible,
+.wd-forms-builder__button:focus-visible {
+    outline: 2px solid rgba(37, 99, 235, 0.6);
+    outline-offset: 2px;
+}
 .wd-forms-builder__buttons button::before {
     font-size: 16px;
     line-height: 1;
@@ -247,11 +271,12 @@
     border-radius: 12px;
     padding: 12px;
     background: #f8fafc;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04);
 }
 
 .wd-forms-builder__preview-field--active {
     border-color: #1d4ed8;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2), 0 10px 18px rgba(37, 99, 235, 0.12);
 }
 
 .wd-forms-builder__preview-actions {
@@ -268,11 +293,13 @@
     padding: 4px 8px;
     font-size: 12px;
     cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .wd-forms-builder__preview-actions button:hover {
     border-color: #1d4ed8;
     color: #1d4ed8;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.12);
 }
 
 .wd-forms-builder__editor {
@@ -329,7 +356,7 @@
     margin-bottom: 10px;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     font-size: 12px;
-    background: #f1f5f9;
+    background: #f8fafc;
 }
 
 .wd-forms-builder__export .wd-forms-builder__button {
@@ -350,6 +377,16 @@
     border-radius: 8px;
     border: 1px solid #cbd5f5;
     padding: 8px 10px;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wd-forms-builder__field-input:focus,
+.wd-forms-builder__field-textarea:focus,
+.wd-forms-builder__field-select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 .wd-forms-builder__field-group {
@@ -384,4 +421,5 @@
     padding: 8px 10px;
     border-radius: 8px;
     text-align: center;
+}
 }
