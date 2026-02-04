@@ -52,6 +52,118 @@ function wd_forms_register_admin_menu()
 
 add_action('admin_menu', 'wd_forms_register_admin_menu');
 
+function wd_forms_register_entry_post_type()
+{
+    $labels = array(
+        'name' => 'Form Entries',
+        'singular_name' => 'Form Entry',
+        'menu_name' => 'Form Entries',
+        'add_new_item' => 'Add New Entry',
+        'edit_item' => 'View Entry',
+        'view_item' => 'View Entry',
+        'search_items' => 'Search Entries',
+        'not_found' => 'No entries found'
+    );
+
+    register_post_type(
+        'wd_form_entry',
+        array(
+            'labels' => $labels,
+            'public' => false,
+            'show_ui' => true,
+            'show_in_menu' => true,
+            'supports' => array('title'),
+            'menu_icon' => 'dashicons-feedback',
+            'capability_type' => 'post'
+        )
+    );
+}
+
+add_action('init', 'wd_forms_register_entry_post_type');
+
+function wd_forms_sanitize_entry_fields($fields)
+{
+    $sanitized = array();
+    foreach ((array) $fields as $key => $value) {
+        $clean_key = sanitize_key($key);
+        if (is_array($value)) {
+            $sanitized[$clean_key] = wd_forms_sanitize_entry_fields($value);
+        } else {
+            $sanitized[$clean_key] = sanitize_text_field($value);
+        }
+    }
+    return $sanitized;
+}
+
+function wd_forms_store_entry(WP_REST_Request $request)
+{
+    if ($request->get_method() === 'OPTIONS') {
+        return new WP_REST_Response(null, 204);
+    }
+
+    $params = $request->get_json_params();
+    if (empty($params)) {
+        $params = $request->get_body_params();
+    }
+
+    $title = sanitize_text_field($params['formTitle'] ?? $params['title'] ?? 'WD Form Entry');
+    $fields = isset($params['fields']) && is_array($params['fields']) ? $params['fields'] : $params;
+    $source = esc_url_raw($params['source'] ?? '');
+
+    $entry_id = wp_insert_post(
+        array(
+            'post_type' => 'wd_form_entry',
+            'post_status' => 'private',
+            'post_title' => $title . ' - ' . current_time('mysql')
+        ),
+        true
+    );
+
+    if (is_wp_error($entry_id)) {
+        return new WP_REST_Response(
+            array('success' => false, 'message' => 'Unable to store entry.'),
+            500
+        );
+    }
+
+    update_post_meta($entry_id, '_wd_form_fields', wd_forms_sanitize_entry_fields($fields));
+    update_post_meta($entry_id, '_wd_form_source', $source);
+
+    return new WP_REST_Response(
+        array(
+            'success' => true,
+            'entryId' => $entry_id
+        ),
+        201
+    );
+}
+
+function wd_forms_register_rest_routes()
+{
+    register_rest_route(
+        'wd-forms/v1',
+        '/entries',
+        array(
+            'methods' => array('POST', 'OPTIONS'),
+            'callback' => 'wd_forms_store_entry',
+            'permission_callback' => '__return_true'
+        )
+    );
+}
+
+add_action('rest_api_init', 'wd_forms_register_rest_routes');
+
+function wd_forms_send_cors_headers($served, $result, $request, $server)
+{
+    if (strpos($request->get_route(), '/wd-forms/v1/entries') === 0) {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+    }
+    return $served;
+}
+
+add_filter('rest_pre_serve_request', 'wd_forms_send_cors_headers', 10, 4);
 
 function wd_forms_builder_shortcode($atts)
 {
@@ -76,7 +188,7 @@ function wd_forms_builder_shortcode($atts)
     );
 
     $style_map = array(
-        'primary_color' => '--wd-forms-primary',
+        'primary_color' => '--wd-forms-primary',        
         'primary_hover_color' => '--wd-forms-primary-hover',
         'background_color' => '--wd-forms-bg',
         'panel_background_color' => '--wd-forms-panel-bg',
@@ -117,7 +229,7 @@ function wd_forms_builder_shortcode($atts)
         $style_attribute = ' style="' . esc_attr(implode(' ', $inline_styles)) . '"';
     }
     ?>
-       <div class="wd-forms-builder<?php echo esc_attr($custom_class); ?>" data-wd-forms-builder<?php echo $style_attribute; ?>>
+    <div class="wd-forms-builder<?php echo esc_attr($custom_class); ?>" data-wd-forms-builder data-wd-entry-endpoint="<?php echo esc_url(rest_url('wd-forms/v1/entries')); ?>"<?php echo $style_attribute; ?>>
         <header class="wd-forms-builder__header">
             <div>
                 <p class="wd-forms-builder__eyebrow">WD Forms Builder</p>
@@ -135,7 +247,7 @@ function wd_forms_builder_shortcode($atts)
                 <p class="wd-forms-builder__help">Click to add fields to your form.</p>
                 <div class="wd-forms-builder__buttons" data-field-library>
                     <p class="wd-forms-builder__library-heading">Core Fields</p>
-                     <button type="button" data-field-type="address"><span class="wd-forms-builder__button-icon" aria-hidden="true">🏠</span>Address</button>
+                    <button type="button" data-field-type="address"><span class="wd-forms-builder__button-icon" aria-hidden="true">🏠</span>Address</button>
                     <button type="button" data-field-type="checkbox"><span class="wd-forms-builder__button-icon" aria-hidden="true">☑️</span>Checkbox</button>
                     <button type="button" data-field-type="date"><span class="wd-forms-builder__button-icon" aria-hidden="true">📅</span>Date</button>
                     <button type="button" data-field-type="email"><span class="wd-forms-builder__button-icon" aria-hidden="true">✉️</span>Email</button>
@@ -192,10 +304,17 @@ function wd_forms_builder_shortcode($atts)
                     <div class="wd-forms-builder__row">
                         <label class="wd-forms-builder__label" for="wd-confirmation-type">Confirmation type</label>
                         <select class="wd-forms-builder__input" id="wd-confirmation-type">
-@@ -301,26 +301,26 @@ function wd_forms_builder_shortcode()
+                            <option value="message">Show message</option>
+                            <option value="redirect">Redirect</option>
+                        </select>
+                    </div>
                     <div class="wd-forms-builder__row wd-forms-builder__row--inline">
                         <label class="wd-forms-builder__label" for="wd-entries-export">Allow CSV export</label>
                         <input id="wd-entries-export" type="checkbox" checked />
+                    </div>
+                    <div class="wd-forms-builder__row">
+                        <label class="wd-forms-builder__label" for="wd-entries-endpoint">Entry storage endpoint</label>
+                        <input class="wd-forms-builder__input" id="wd-entries-endpoint" type="url" value="<?php echo esc_url(rest_url('wd-forms/v1/entries')); ?>" />
                     </div>
                     <div class="wd-forms-builder__row">
                         <label class="wd-forms-builder__label" for="wd-entries-analytics">Analytics tag</label>

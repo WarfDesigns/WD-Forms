@@ -43,7 +43,9 @@
     const integrationWebhook = root.querySelector('#wd-integration-webhook');
     const entriesEnabled = root.querySelector('#wd-entries-enabled');
     const entriesExport = root.querySelector('#wd-entries-export');
+    const entriesEndpoint = root.querySelector('#wd-entries-endpoint');
     const entriesAnalytics = root.querySelector('#wd-entries-analytics');
+    const defaultEntryEndpoint = root.getAttribute('data-wd-entry-endpoint') || '';
 
     let fields = [];
     let activeFieldId = null;
@@ -91,7 +93,8 @@
     let entrySettings = {
         enabled: true,
         exportCsv: true,
-        analyticsTag: ''
+        analyticsTag: '',
+        endpoint: defaultEntryEndpoint
     };
 
     const fieldTemplates = {
@@ -663,14 +666,22 @@
             entries: entrySettings
         };
         jsonOutput.value = JSON.stringify(exportData, null, 2);
-        htmlOutput.value = buildHtmlOutput(formTitle, fields, notificationSettings, formSettings, styleSettings, paymentSettings);
+        htmlOutput.value = buildHtmlOutput(
+            formTitle,
+            fields,
+            notificationSettings,
+            formSettings,
+            styleSettings,
+            paymentSettings,
+            entrySettings
+        );
     };
 
-    const buildHtmlOutput = (title, exportFields, notifications, settings, styles, payments) => {
+    const buildHtmlOutput = (title, exportFields, notifications, settings, styles, payments, entries) => {
         const notificationAttrs = notifications.enabled
             ? ` data-wd-notifications="enabled" data-wd-notification-recipients="${escapeAttribute(notifications.recipients)}" data-wd-notification-subject="${escapeAttribute(notifications.subject)}" data-wd-notification-message="${escapeAttribute(notifications.message)}" data-wd-notification-delay="${notifications.delay}" data-wd-notification-delay-unit="${notifications.delayUnit}"`
             : '';
-        const settingsAttrs = ` data-wd-confirmation="${settings.confirmationType}" data-wd-confirmation-message="${escapeAttribute(settings.confirmationMessage)}" data-wd-confirmation-redirect="${escapeAttribute(settings.confirmationRedirect)}" data-wd-schedule-start="${settings.scheduleStart}" data-wd-schedule-end="${settings.scheduleEnd}" data-wd-limit-entries="${settings.limitEntries}" data-wd-require-login="${settings.requireLogin}" data-wd-save-entries="${settings.saveEntries}" data-wd-multipage="${settings.multiPage}" data-wd-progress="${settings.progressBar}"`;
+        const settingsAttrs = ` data-wd-confirmation="${settings.confirmationType}" data-wd-confirmation-message="${escapeAttribute(settings.confirmationMessage)}" data-wd-confirmation-redirect="${escapeAttribute(settings.confirmationRedirect)}" data-wd-schedule-start="${settings.scheduleStart}" data-wd-schedule-end="${settings.scheduleEnd}" data-wd-limit-entries="${settings.limitEntries}" data-wd-require-login="${settings.requireLogin}" data-wd-save-entries="${settings.saveEntries}" data-wd-multipage="${settings.multiPage}" data-wd-progress="${settings.progressBar}" data-wd-entry-endpoint="${escapeAttribute(entries.endpoint || '')}" data-wd-entries-enabled="${entries.enabled}" data-wd-form-title="${escapeAttribute(title)}"`;
         const styleAttrs = ` data-wd-theme="${styles.theme}" data-wd-columns="${styles.columns}" data-wd-css="${escapeAttribute(styles.cssClass)}"`;
         const paymentAttrs = payments.enabled
             ? ` data-wd-payments="enabled" data-wd-payment-gateway="${payments.gateway}" data-wd-payment-currency="${escapeAttribute(payments.currency)}"`
@@ -678,50 +689,50 @@
         const fieldHtml = exportFields
             .map((field) => {
                 if (field.type === 'textarea') {
-                    return `<label>${field.label}${field.required ? ' *' : ''}<textarea placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''}></textarea><small>${field.helpText || ''}</small></label>`;
+                    return `<label>${field.label}${field.required ? ' *' : ''}<textarea name="${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''}></textarea><small>${field.helpText || ''}</small></label>`;
                 }
                 if (field.type === 'select') {
                     const options = field.options.map((option) => `<option>${option}</option>`).join('');
-                    return `<label>${field.label}${field.required ? ' *' : ''}<select ${field.required ? 'required' : ''}>${options}</select><small>${field.helpText || ''}</small></label>`;
+                    return `<label>${field.label}${field.required ? ' *' : ''}<select name="${field.id}" ${field.required ? 'required' : ''}>${options}</select><small>${field.helpText || ''}</small></label>`;
                 }
                 if (field.type === 'radio') {
                     const options = field.options
-                        .map((option) => `<label><input type="radio" name="${field.id}" /> ${option}</label>`)
+                        .map((option) => `<label><input type="radio" name="${field.id}" value="${escapeAttribute(option)}" /> ${option}</label>`)
                         .join('');
                     return `<fieldset><legend>${field.label}${field.required ? ' *' : ''}</legend>${options}</fieldset>`;
                 }
                 if (field.type === 'checkbox') {
-                    return `<label><input type="checkbox" ${field.required ? 'required' : ''}/> ${field.label}</label>`;
+                    return `<label><input type="checkbox" name="${field.id}" value="1" ${field.required ? 'required' : ''}/> ${field.label}</label>`;
                 }
                 if (field.type === 'date') {
-                    return `<label>${field.label}${field.required ? ' *' : ''}<input type="date" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
+                    return `<label>${field.label}${field.required ? ' *' : ''}<input type="date" name="${field.id}" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
                 }
                 if (field.type === 'time') {
-                    return `<label>${field.label}${field.required ? ' *' : ''}<input type="time" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
+                    return `<label>${field.label}${field.required ? ' *' : ''}<input type="time" name="${field.id}" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
                 }
                 if (field.type === 'file') {
-                    return `<label>${field.label}${field.required ? ' *' : ''}<input type="file" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
+                    return `<label>${field.label}${field.required ? ' *' : ''}<input type="file" name="${field.id}" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
                 }
                 if (field.type === 'signature') {
                     return `<div class="wd-signature">${field.label}</div>`;
                 }
                 if (field.type === 'address') {
-                    return `<fieldset><legend>${field.label}</legend><input placeholder="Street address" /><input placeholder="City" /><input placeholder="Postal code" /></fieldset>`;
+                    return `<fieldset><legend>${field.label}</legend><input name="${field.id}[street]" placeholder="Street address" /><input name="${field.id}[city]" placeholder="City" /><input name="${field.id}[postal]" placeholder="Postal code" /></fieldset>`;
                 }
                 if (field.type === 'name') {
-                    return `<fieldset><legend>${field.label}</legend><input placeholder="First name" /><input placeholder="Last name" /></fieldset>`;
+                    return `<fieldset><legend>${field.label}</legend><input name="${field.id}[first]" placeholder="First name" /><input name="${field.id}[last]" placeholder="Last name" /></fieldset>`;
                 }
                 if (field.type === 'rating') {
-                    return `<label>${field.label}<input type="range" min="1" max="${field.max || 5}" /></label>`;
+                    return `<label>${field.label}<input type="range" name="${field.id}" min="1" max="${field.max || 5}" /></label>`;
                 }
                 if (field.type === 'scale') {
-                    return `<label>${field.label}<input type="range" min="${field.min || 1}" max="${field.max || 10}" /></label>`;
+                    return `<label>${field.label}<input type="range" name="${field.id}" min="${field.min || 1}" max="${field.max || 10}" /></label>`;
                 }
                 if (field.type === 'slider') {
-                    return `<label>${field.label}<input type="range" min="${field.min || 0}" max="${field.max || 100}" /></label>`;
+                    return `<label>${field.label}<input type="range" name="${field.id}" min="${field.min || 0}" max="${field.max || 100}" /></label>`;
                 }
                 if (field.type === 'toggle') {
-                    return `<label><input type="checkbox" /> ${field.label}</label>`;
+                    return `<label><input type="checkbox" name="${field.id}" value="1" /> ${field.label}</label>`;
                 }
                 if (field.type === 'captcha') {
                     return `<div class="wd-captcha">reCAPTCHA</div>`;
@@ -739,13 +750,13 @@
                     return `<div class="wd-page-break"></div>`;
                 }
                 if (field.type === 'hidden') {
-                    return `<input type="hidden" value="${escapeAttribute(field.defaultValue || '')}" />`;
+                    return `<input type="hidden" name="${field.id}" value="${escapeAttribute(field.defaultValue || '')}" />`;
                 }
                 if (field.type === 'product') {
-                    return `<label>${field.label}<input type="text" value="$${field.price || 0}" readonly /></label>`;
+                    return `<label>${field.label}<input type="text" name="${field.id}" value="$${field.price || 0}" readonly /></label>`;
                 }
                 if (field.type === 'quantity') {
-                    return `<label>${field.label}<input type="number" min="${field.min || 1}" max="${field.max || ''}" /></label>`;
+                    return `<label>${field.label}<input type="number" name="${field.id}" min="${field.min || 1}" max="${field.max || ''}" /></label>`;
                 }
                 if (field.type === 'total') {
                     return `<div class="wd-total">${field.label}</div>`;
@@ -766,11 +777,84 @@
                 } else if (field.type === 'url') {
                     type = 'url';
                 }
-                return `<label>${field.label}${field.required ? ' *' : ''}<input type="${type}" placeholder="${field.placeholder || ''}" value="${escapeAttribute(field.defaultValue || '')}" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
+                return `<label>${field.label}${field.required ? ' *' : ''}<input type="${type}" name="${field.id}" placeholder="${field.placeholder || ''}" value="${escapeAttribute(field.defaultValue || '')}" ${field.required ? 'required' : ''}/><small>${field.helpText || ''}</small></label>`;
             })
             .join('');
 
-        return `<!-- WD Forms Export -->\n<form class="wd-export-form" aria-label="${title}"${notificationAttrs}${settingsAttrs}${styleAttrs}${paymentAttrs}>\n<h3>${title}</h3>\n${settings.description ? `<p>${settings.description}</p>` : ''}\n${fieldHtml}\n</form>`;
+        const submissionScript = `
+<script>
+(function () {
+  const forms = document.querySelectorAll('form[data-wd-form]');
+  const coerceBool = (value) => value === 'true' || value === '1';
+  const showMessage = (form, message, isError) => {
+    let messageBox = form.querySelector('[data-wd-form-message]');
+    if (!messageBox) {
+      messageBox = document.createElement('div');
+      messageBox.setAttribute('data-wd-form-message', 'true');
+      messageBox.style.marginTop = '12px';
+      messageBox.style.fontSize = '0.95rem';
+      form.appendChild(messageBox);
+    }
+    messageBox.textContent = message;
+    messageBox.style.color = isError ? '#b91c1c' : '#15803d';
+  };
+
+  forms.forEach((form) => {
+    if (form.dataset.wdEntriesBound === 'true') {
+      return;
+    }
+    form.dataset.wdEntriesBound = 'true';
+    form.addEventListener('submit', async (event) => {
+      const shouldSave = coerceBool(form.dataset.wdSaveEntries);
+      const entriesEnabled = coerceBool(form.dataset.wdEntriesEnabled);
+      const endpoint = form.dataset.wdEntryEndpoint;
+      if (!shouldSave || !entriesEnabled || !endpoint) {
+        return;
+      }
+      event.preventDefault();
+      const formData = new FormData(form);
+      const fields = {};
+      formData.forEach((value, key) => {
+        if (fields[key]) {
+          if (!Array.isArray(fields[key])) {
+            fields[key] = [fields[key]];
+          }
+          fields[key].push(value);
+        } else {
+          fields[key] = value;
+        }
+      });
+      const payload = {
+        formTitle: form.dataset.wdFormTitle || form.getAttribute('aria-label') || 'WD Form',
+        fields,
+        source: window.location.href
+      };
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+          throw new Error('Submission failed');
+        }
+        if (form.dataset.wdConfirmation === 'redirect' && form.dataset.wdConfirmationRedirect) {
+          window.location.href = form.dataset.wdConfirmationRedirect;
+          return;
+        }
+        const confirmationMessage = form.dataset.wdConfirmationMessage || 'Thanks for your submission.';
+        showMessage(form, confirmationMessage, false);
+        form.reset();
+      } catch (error) {
+        showMessage(form, 'Unable to submit the form. Please try again.', true);
+      }
+    });
+  });
+})();
+</script>`;
+
+        return `<!-- WD Forms Export -->\n<form class="wd-export-form" data-wd-form aria-label="${title}"${notificationAttrs}${settingsAttrs}${styleAttrs}${paymentAttrs}>\n<h3>${title}</h3>\n${settings.description ? `<p>${settings.description}</p>` : ''}\n${fieldHtml}\n</form>\n${submissionScript}`;
     };
 
     const handleCopy = async (text, button) => {
@@ -786,7 +870,14 @@
         }
     };
 
-    fieldLibrary.addEventListener('click', (event) => {
+    const bindEvent = (element, eventName, handler) => {
+        if (!element) {
+            return;
+        }
+        element.addEventListener(eventName, handler);
+    };
+
+    bindEvent(fieldLibrary, 'click', (event) => {
         const type = event.target.getAttribute('data-field-type');
         if (!type) {
             return;
@@ -799,139 +890,146 @@
         renderExport();
     });
 
-    formTitleInput.addEventListener('input', () => {
+    bindEvent(formTitleInput, 'input', () => {
         renderExport();
     });
 
-    copyHtmlButton.addEventListener('click', () => handleCopy(htmlOutput.value, copyHtmlButton));
-    copyJsonButton.addEventListener('click', () => handleCopy(jsonOutput.value, copyJsonButton));
+    bindEvent(copyHtmlButton, 'click', () => handleCopy(htmlOutput.value, copyHtmlButton));
+    bindEvent(copyJsonButton, 'click', () => handleCopy(jsonOutput.value, copyJsonButton));
 
-    notificationToggle.addEventListener('change', (event) => {
+    bindEvent(notificationToggle, 'change', (event) => {
         notificationSettings = { ...notificationSettings, enabled: event.target.checked };
         renderExport();
     });
-    notificationRecipients.addEventListener('input', (event) => {
+    bindEvent(notificationRecipients, 'input', (event) => {
         notificationSettings = { ...notificationSettings, recipients: event.target.value };
         renderExport();
     });
-    notificationSubject.addEventListener('input', (event) => {
+    bindEvent(notificationSubject, 'input', (event) => {
         notificationSettings = { ...notificationSettings, subject: event.target.value };
         renderExport();
     });
-    notificationMessage.addEventListener('input', (event) => {
+    bindEvent(notificationMessage, 'input', (event) => {
         notificationSettings = { ...notificationSettings, message: event.target.value };
         renderExport();
     });
-    notificationDelay.addEventListener('input', (event) => {
+    bindEvent(notificationDelay, 'input', (event) => {
         const delayValue = Number(event.target.value);
         notificationSettings = { ...notificationSettings, delay: Number.isNaN(delayValue) ? 0 : delayValue };
         renderExport();
     });
-    notificationDelayUnit.addEventListener('change', (event) => {
+    bindEvent(notificationDelayUnit, 'change', (event) => {
         notificationSettings = { ...notificationSettings, delayUnit: event.target.value };
         renderExport();
     });
-    formDescription.addEventListener('input', (event) => {
+    bindEvent(formDescription, 'input', (event) => {
         formSettings = { ...formSettings, description: event.target.value };
         renderExport();
     });
-    confirmationType.addEventListener('change', (event) => {
+    bindEvent(confirmationType, 'change', (event) => {
         formSettings = { ...formSettings, confirmationType: event.target.value };
         renderExport();
     });
-    confirmationMessage.addEventListener('input', (event) => {
+    bindEvent(confirmationMessage, 'input', (event) => {
         formSettings = { ...formSettings, confirmationMessage: event.target.value };
         renderExport();
     });
-    confirmationRedirect.addEventListener('input', (event) => {
+    bindEvent(confirmationRedirect, 'input', (event) => {
         formSettings = { ...formSettings, confirmationRedirect: event.target.value };
         renderExport();
     });
-    formScheduleStart.addEventListener('change', (event) => {
+    bindEvent(formScheduleStart, 'change', (event) => {
         formSettings = { ...formSettings, scheduleStart: event.target.value };
         renderExport();
     });
-    formScheduleEnd.addEventListener('change', (event) => {
+    bindEvent(formScheduleEnd, 'change', (event) => {
         formSettings = { ...formSettings, scheduleEnd: event.target.value };
         renderExport();
     });
-    formLimitEntries.addEventListener('input', (event) => {
+    bindEvent(formLimitEntries, 'input', (event) => {
         formSettings = { ...formSettings, limitEntries: event.target.value };
         renderExport();
     });
-    formRequireLogin.addEventListener('change', (event) => {
+    bindEvent(formRequireLogin, 'change', (event) => {
         formSettings = { ...formSettings, requireLogin: event.target.checked };
         renderExport();
     });
-    formSaveEntries.addEventListener('change', (event) => {
+    bindEvent(formSaveEntries, 'change', (event) => {
         formSettings = { ...formSettings, saveEntries: event.target.checked };
         renderExport();
     });
-    formMultiPage.addEventListener('change', (event) => {
+    bindEvent(formMultiPage, 'change', (event) => {
         formSettings = { ...formSettings, multiPage: event.target.checked };
         renderExport();
     });
-    formProgress.addEventListener('change', (event) => {
+    bindEvent(formProgress, 'change', (event) => {
         formSettings = { ...formSettings, progressBar: event.target.checked };
         renderExport();
     });
-    logicEnabled.addEventListener('change', (event) => {
+    bindEvent(logicEnabled, 'change', (event) => {
         logicSettings = { ...logicSettings, enabled: event.target.checked };
         renderExport();
     });
-    logicSummary.addEventListener('input', (event) => {
+    bindEvent(logicSummary, 'input', (event) => {
         logicSettings = { ...logicSettings, summary: event.target.value };
         renderExport();
     });
-    calculationFormula.addEventListener('input', (event) => {
+    bindEvent(calculationFormula, 'input', (event) => {
         logicSettings = { ...logicSettings, calculation: event.target.value };
         renderExport();
     });
-    styleTheme.addEventListener('change', (event) => {
+    bindEvent(styleTheme, 'change', (event) => {
         styleSettings = { ...styleSettings, theme: event.target.value };
         renderExport();
     });
-    styleColumns.addEventListener('change', (event) => {
+    bindEvent(styleColumns, 'change', (event) => {
         styleSettings = { ...styleSettings, columns: event.target.value };
         renderExport();
     });
-    styleCss.addEventListener('input', (event) => {
+    bindEvent(styleCss, 'input', (event) => {
         styleSettings = { ...styleSettings, cssClass: event.target.value };
         renderExport();
     });
-    paymentEnabled.addEventListener('change', (event) => {
+    bindEvent(paymentEnabled, 'change', (event) => {
         paymentSettings = { ...paymentSettings, enabled: event.target.checked };
         renderExport();
     });
-    paymentGateway.addEventListener('change', (event) => {
+    bindEvent(paymentGateway, 'change', (event) => {
         paymentSettings = { ...paymentSettings, gateway: event.target.value };
         renderExport();
     });
-    paymentCurrency.addEventListener('input', (event) => {
+    bindEvent(paymentCurrency, 'input', (event) => {
         paymentSettings = { ...paymentSettings, currency: event.target.value };
         renderExport();
     });
-    integrationEnabled.addEventListener('change', (event) => {
+    bindEvent(integrationEnabled, 'change', (event) => {
         integrationSettings = { ...integrationSettings, enabled: event.target.checked };
         renderExport();
     });
-    integrationCrm.addEventListener('change', (event) => {
+    bindEvent(integrationCrm, 'change', (event) => {
         integrationSettings = { ...integrationSettings, crm: event.target.value };
         renderExport();
     });
-    integrationWebhook.addEventListener('input', (event) => {
+    bindEvent(integrationWebhook, 'input', (event) => {
         integrationSettings = { ...integrationSettings, webhook: event.target.value };
         renderExport();
     });
-    entriesEnabled.addEventListener('change', (event) => {
+    bindEvent(entriesEnabled, 'change', (event) => {
         entrySettings = { ...entrySettings, enabled: event.target.checked };
         renderExport();
     });
-    entriesExport.addEventListener('change', (event) => {
+    bindEvent(entriesExport, 'change', (event) => {
         entrySettings = { ...entrySettings, exportCsv: event.target.checked };
         renderExport();
     });
-    entriesAnalytics.addEventListener('input', (event) => {
+    if (entriesEndpoint) {
+        entriesEndpoint.value = entriesEndpoint.value || defaultEntryEndpoint;
+        bindEvent(entriesEndpoint, 'input', (event) => {
+            entrySettings = { ...entrySettings, endpoint: event.target.value };
+            renderExport();
+        });
+    }
+    bindEvent(entriesAnalytics, 'input', (event) => {
         entrySettings = { ...entrySettings, analyticsTag: event.target.value };
         renderExport();
     });

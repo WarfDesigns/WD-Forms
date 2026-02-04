@@ -32,14 +32,15 @@ In short: WordPress hosts the builder UI, and the exported HTML/JSON can be drop
 
 ## Entry storage
 
-WD Forms currently focuses on building and exporting form markup + configuration. Form entries are **not** stored by the plugin yet. The "Save entries in WordPress" and entry management settings are included in the export data as configuration flags only, so you can wire them up to your own storage layer.
+WD Forms now ships with automatic entry storage on the WordPress site where the plugin is installed (for example, `hosting.com` as the shared server). The HTML export posts submissions to the REST endpoint on that site, which stores each entry as a private **Form Entry** in WordPress.
 
-If you want entries saved today, you need to provide the storage location yourself:
+How it works:
 
-- **WordPress**: Create a custom endpoint (or hook into an existing form handler) that writes submissions to your preferred storage (e.g., a custom database table or a CPT) and respects the export flags.
-- **Non-WordPress**: Send submissions to your own backend, serverless function, or form service and store them in your chosen database.
+- The HTML export includes `data-wd-entry-endpoint`, which defaults to the WordPress REST route (`https://your-site.com/wp-json/wd-forms/v1/entries`).
+- When a visitor submits the exported form (even on a non-WordPress site), the inline script sends the payload to the shared WordPress host.
+- Entries are stored as the custom post type **Form Entry** with the submitted fields saved as post meta.
 
-When entry storage is implemented in the plugin, this section will be updated with the storage location and how to access saved submissions.
+If you want to store entries on a different WordPress host, update the **Entry storage endpoint** in the builder before exporting the form.
 
 
 ## Email scheduling
